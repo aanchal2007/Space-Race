@@ -4,6 +4,8 @@ var ball,ballImg;
 var jet1Score = 0;
 var jet2Score = 0;
 var ballGroup;
+var goal, goal1;
+var gameState = "serve";
 
 function preload(){
   spaceJet1Img = loadImage("spaceship.png");
@@ -22,6 +24,12 @@ function setup() {
   spaceJet2.addImage(spaceJet2Img);
   spaceJet2.scale = 0.7;
 
+  goal = createSprite(100, 50, 50, 50);
+  goal.shapeColor = "black";
+
+  goal1 = createSprite(290, 50, 50, 50);
+  goal1.shapeColor = "black";
+
   ballGroup = new Group();
 }
 
@@ -36,23 +44,35 @@ function draw() {
   line(200, 450, 200, 240);
 
   if(keyIsDown(UP_ARROW)){
-    // spaceJet1.velocityX = 0;
+    // spaceJet1.velocityX = 1;
     // spaceJet1.velocityY = -2;
-    spaceJet1.y=spaceJet1.y-1;
+    spaceJet1.y=spaceJet1.y-6;
   }
 
   if(keyIsDown(DOWN_ARROW)){
-    // spaceJet1.velocityX = 0;
+    // spaceJet1.velocityX = 1;
     // spaceJet1.velocityY = 2;
-    spaceJet1.y = spaceJet1.y+1;
+    spaceJet1.y = spaceJet1.y+4;
+  }
+
+  if(spaceJet1.isTouching(goal) ){
+    jet1Score = jet1Score+2;
+    spaceJet1.x = 100;
+    spaceJet1.y = 320;
+  }
+
+  if(spaceJet2.isTouching(goal1) ){
+    jet2Score = jet2Score+2;
+    spaceJet2.x = 300;
+    spaceJet2.y = 320;
   }
   
   if (keyDown("w")) {
-    spaceJet2.y = spaceJet2.y - 1;
+    spaceJet2.y = spaceJet2.y - 6;
   }
 
   if (keyDown("s")) {
-    spaceJet2.y = spaceJet2.y + 1;
+    spaceJet2.y = spaceJet2.y + 4;
   }
 
   spawnballs()
@@ -67,6 +87,21 @@ function draw() {
     jet2Score = jet2Score - 1;
     spaceJet2.x = 300;
     spaceJet2.y = 320;
+  }
+
+  if(jet1Score >= 5|| jet2Score >= 5 ){
+    gameState = "End";
+  }
+
+  if(gameState === "End"){
+    ballGroup.destroyEach();
+    if(jet1Score >= 5 ){
+      text("SPACEJET1 WON", 100, 150);
+    }
+    if(jet2Score >= 5){
+      text("SPACEJET2 WON", 100, 150);
+    }
+    reset();
   }
 
   drawSprites();
@@ -88,4 +123,13 @@ function spawnballs(){
     }
     ballGroup.add(ball);
   }
+}
+
+function reset(){
+  jet1Score = 0;
+  jet2Score = 0;
+  spaceJet1.x = 100;
+  spaceJet1.y = 320;
+  spaceJet2.x = 300;
+  spaceJet2.y = 320;
 }
