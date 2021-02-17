@@ -4,23 +4,25 @@ var ball,ballImg;
 var jet1Score = 0;
 var jet2Score = 0;
 var ballGroup;
-var goal, goal1;
+var goal, goal1, goalImage;
 var gameState = "serve";
 var planeSound;
 var scoreSound;
-//var clappingSound;
+var clappingSound;
+var space_img;
 
 function preload(){
   spaceJet1Img = loadImage("spaceship.png");
   spaceJet2Img = loadImage("spaceship.png");
 
   ballImg = loadImage("whiteball.png");
-  planeSound = loadSound("planecrashsound.wav");
+  planeSound = loadSound("crashSound.mp3");
   scoreSound = loadSound("score_sound.mp3");
-  //clappingSound = loadSound("clapping_sound.mp3");
+  clappingSound = loadSound("clapping_sound.mp3");
 
-  // goalImage = loadImage("GoalImage.png");
-  // goal1Image = loadImage("GoalImage.png");
+  goalImage = loadImage("GoalImg/GoalImage.png");
+
+  space_img = loadImage("space_img.png");
 }
 
 function setup() {
@@ -35,17 +37,19 @@ function setup() {
 
   goal = createSprite(100, 50, 50, 50);
   goal.shapeColor = "black";
-  //goal.addImage(goalImage);
+  goal.addImage(goalImage);
+  goal.scale = 0.3;
 
   goal1 = createSprite(290, 50, 50, 50);
   goal1.shapeColor = "black";
-  //goal1.addImage(goalImage);
+  goal1.addImage(goalImage);
+  goal1.scale = 0.3;
 
   ballGroup = new Group();
 }
 
 function draw() {
-  background("grey"); 
+  background(space_img); 
 
   textSize(20);
   fill("white");
@@ -111,11 +115,11 @@ function draw() {
   if(gameState === "End"){
     ballGroup.destroyEach();
     if(jet1Score >= 5 ){
-      //clappingSound.play();
+      clappingSound.play();
       text("SPACEJET1 WON", 100, 150);
     }
     if(jet2Score >= 5){
-      //clappingSound.play();
+      clappingSound.play();
       text("SPACEJET2 WON", 100, 150);
     }
     reset();
